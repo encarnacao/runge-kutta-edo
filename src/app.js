@@ -45,7 +45,9 @@ app.get("/", (_,res)=>{
     res.send("Hello World");
 });
 
-app.listen(PORT, () => {
-    installRequirements().then(() => console.log("requirements instalados"));
-    console.log(`Server running on port ${PORT}`);
+installRequirements().then(() => {
+    console.log("requirements instalados")
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
 });
