@@ -21,7 +21,11 @@ async function pythonScript(equation,x0,y0,dy0,step,n){
     console.log("executando script");
     const { stdout, stderr } = await execPromise(`python ./src/script.py ${equation} ${x0} ${y0} ${dy0} ${step} ${n}`);
 }
-
+async function installRequirements(){
+    console.log("instalando requirements");
+    const { stdout, stderr } = await execPromise(`pip install -r ./requirements.txt`);
+    return stdout;
+}
 app.post("/ode", (req,res) =>{
     const { error } = odeSchema.validate(req.body);
     if(error){
@@ -42,5 +46,6 @@ app.get("/", (_,res)=>{
 });
 
 app.listen(PORT, () => {
+    installRequirements().then(() => console.log("requirements instalados"));
     console.log(`Server running on port ${PORT}`);
 });
