@@ -1,7 +1,12 @@
 import { exec } from "child_process";
 import { promisify } from "util";
+import path from 'path'
 import express from "express";
 import Joi from "joi";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const odeSchema = Joi.object({
     equation: Joi.string().required(),
@@ -35,7 +40,13 @@ app.post("/ode", (req,res) =>{
     const { equation, x0, y0, dy0, step, max } = req.body;
     const n = parseInt(Number(max)/Number(step));
     pythonScript(equation,x0,y0,dy0,step,n).then(()=>{
-        res.status(201).send("Script executado com sucesso");
+        res.status(201).sendFile(path.join(__dirname, '../images', 'plot.png'),(err)=>{
+            if(err){
+                console.log(err);
+            } else{
+                console.log("Imagem enviada");
+            }
+        })
     }
     );
 })
