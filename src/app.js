@@ -36,46 +36,54 @@ async function installRequirements() {
 	return stdout;
 }
 app.post("/ode", (req, res) => {
-	const { error } = odeSchema.validate(req.body);
-	if (error) {
-		res.status(400).send(error.details[0].message);
-		return;
-	}
-	const { equation, x0, y0, dy0, step, max } = req.body;
-	const n = parseInt(Number(max) / Number(step));
-	pythonScript(equation, x0, y0, dy0, step, n).then(() => {
-		res.status(201).sendFile(
-			path.join(__dirname, "../images", "plot.png"),
-			(err) => {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log("Imagem enviada");
+	try {
+		const { error } = odeSchema.validate(req.body);
+		if (error) {
+			res.status(400).send(error.details[0].message);
+			return;
+		}
+		const { equation, x0, y0, dy0, step, max } = req.body;
+		const n = parseInt(Number(max) / Number(step));
+		pythonScript(equation, x0, y0, dy0, step, n).then(() => {
+			res.status(201).sendFile(
+				path.join(__dirname, "../images", "plot.png"),
+				(err) => {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log("Imagem enviada");
+					}
 				}
-			}
-		);
-	});
+			);
+		});
+	} catch {
+		res.status(500).send("Não foi possível executar o script");
+	}
 });
 
 app.get("/edo", async (req, res) => {
-	const { equation, x0, y0, dy0, step, max } = req.query;
-	const n = parseInt(Number(max) / Number(step));
 	try {
-		await pythonScript(equation, x0, y0, dy0, step, n);
-	} catch {
-		res.sendStatus(500);
-		return;
-	} finally {
-		res.status(201).sendFile(
-			path.join(__dirname, "../images", "plot.png"),
-			(err) => {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log("Imagem enviada");
+		const { equation, x0, y0, dy0, step, max } = req.query;
+		const n = parseInt(Number(max) / Number(step));
+		try {
+			await pythonScript(equation, x0, y0, dy0, step, n);
+		} catch {
+			res.sendStatus(500);
+			return;
+		} finally {
+			res.status(201).sendFile(
+				path.join(__dirname, "../images", "plot.png"),
+				(err) => {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log("Imagem enviada");
+					}
 				}
-			}
-		);
+			);
+		}
+	} catch {
+		res.status(500).send("Não foi possível executar o script");
 	}
 });
 
