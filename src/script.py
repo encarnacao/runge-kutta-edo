@@ -46,21 +46,6 @@ def ode(equation,t,y):
     return eval(equation)
 
 
-def reformat_equation(equation):
-    equation = equation.replace('sin', 'np.sin')
-    equation = equation.replace('cos', 'np.cos')
-    equation = equation.replace('tan', 'np.tan')
-    equation = equation.replace('exp', 'np.exp')
-    equation = equation.replace('log', 'np.log')
-    equation = equation.replace('sqrt', 'np.sqrt')
-    equation = equation.replace('pi', 'np.pi')
-    if('exp' not in equation):
-        equation = equation.replace('e', 'np.e')
-    equation = equation.replace("y''", "")
-    equation = equation.replace("y'", "dy")
-    equation = equation.replace("^", "**")
-    return equation.strip()
-
 def main(equation,x0, y0, dy0, step, n):
     x,y,dy = runge_kutta_second_order(equation,x0, y0, step, n,ode_second_order,dy0)
     fig, ax = plt.subplots()
