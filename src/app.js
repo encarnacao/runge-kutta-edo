@@ -94,7 +94,7 @@ app.get("/api/", async (_, res) => {
 		const { stdout:hello} = await execPromise("./scripts/hello_world.py");
 		res.send(version+" --- "+hello);
 	} catch(e){
-		res.status(500).send("Deu erro");
+		res.status(500).send(e);
 	}
 });
 
