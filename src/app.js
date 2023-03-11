@@ -24,18 +24,18 @@ const PORT = 5000;
 const execPromise = promisify(exec);
 async function pythonScript(equation, x0, y0, dy0, step, n) {
 	console.log("executando script");
-	const { stdout, stderr } = await execPromise(
-		`python ./src/script.py ${equation} ${x0} ${y0} ${dy0} ${step} ${n}`
+	await execPromise(
+		`python ./scripts/script.py ${equation} ${x0} ${y0} ${dy0} ${step} ${n}`
 	);
 }
 async function installRequirements() {
 	console.log("instalando requirements");
-	const { stdout, stderr } = await execPromise(
+	await execPromise(
 		`pip install -r ./requirements.txt`
 	);
 	return stdout;
 }
-app.post("/ode", (req, res) => {
+app.post("/api/ode", (req, res) => {
 	try {
 		const { error } = odeSchema.validate(req.body);
 		if (error) {
@@ -61,7 +61,7 @@ app.post("/ode", (req, res) => {
 	}
 });
 
-app.get("/edo", async (req, res) => {
+app.get("/api/edo", async (req, res) => {
 	try {
 		const { equation, x0, y0, dy0, step, max } = req.query;
 		const n = parseInt(Number(max) / Number(step));
@@ -88,9 +88,9 @@ app.get("/edo", async (req, res) => {
 });
 
 //Testing route
-app.get("/", async (_, res) => {
+app.get("/api/", async (_, res) => {
 	const { stdout:version } = await execPromise("python --version");
-	const { stdout:hello} = await execPromise("./src/hello_world.py");
+	const { stdout:hello} = await execPromise("./scripts/hello_world.py");
 	res.send(version+" --- "+hello);
 });
 
