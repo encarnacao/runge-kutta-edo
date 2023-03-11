@@ -89,14 +89,16 @@ app.get("/api/edo", async (req, res) => {
 
 //Testing route
 app.get("/api/", async (_, res) => {
-	const { stdout:version } = await execPromise("python --version");
-	const { stdout:hello} = await execPromise("./scripts/hello_world.py");
-	res.send(version+" --- "+hello);
+	try {
+		const { stdout:version } = await execPromise("python --version");
+		const { stdout:hello} = await execPromise("./scripts/hello_world.py");
+		res.send(version+" --- "+hello);
+	} catch(e){
+		res.status(500).send("Deu erro");
+	}
 });
 
-app.get("/", (req, res) => {
-	res.send("Hello World! - Only node");
-});
+
 
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
