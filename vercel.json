@@ -1,0 +1,16 @@
+{
+        "version": 2,
+        "name": "rk4-api",
+        "builds": [
+                {
+                        "src": "/src/app.js",
+                        "use": "@vercel/node"
+                }
+        ],
+        "routes": [
+                {
+                        "src": "/(.*)",
+                        "dest": "/src/app.js"
+                }
+        ]
+}
