@@ -7,7 +7,7 @@
           },
           {
             "src": "scripts/*.py",
-            "use": "@vercel/lambda"
+            "use": "@vercel/python"
           }
         ],
         "routes": [
