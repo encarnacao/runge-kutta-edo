@@ -88,8 +88,10 @@ app.get("/edo", async (req, res) => {
 });
 
 //Testing route
-app.get("/", (_, res) => {
-	res.send("Hello World");
+app.get("/", async (_, res) => {
+	const { stdout:version } = await execPromise("python --version");
+	const { stdout:hello} = await execPromise("./src/hello_world.py");
+	res.send(version+" --- "+hello);
 });
 
 installRequirements().then(() => {
