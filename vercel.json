@@ -1,24 +1,25 @@
 {
-	"version": 2,
-	"name": "rk4-api",
-	"builds": [
-		{
-			"src": "/src/app.js",
-			"use": "@vercel/node"
-		},
-		{
-			"src": "/src/hello_world.py",
-			"use": "@vercel/python"
-		},
-		{
-			"src": "/src/script.py",
-			"use": "@vercel/python"
-		}
-	],
-	"routes": [
-		{
-			"src": "/(.*)",
-			"dest": "/src/app.js"
-		}
-	]
-}
+        "version": 2,
+        "builds": [
+          {
+            "src": "src/app.js",
+            "use": "@vercel/node"
+          },
+          {
+            "src": "scripts/*.py",
+            "use": "@vercel/lambda"
+          }
+        ],
+        "routes": [
+          {
+            "src": "/api/(.*)",
+            "dest": "/src/app.js"
+          },
+          {
+            "src": "/scripts/(.*)",
+            "dest": "/scripts/$1.py",
+            "methods": ["GET"]
+          }
+        ]
+      }
+      
