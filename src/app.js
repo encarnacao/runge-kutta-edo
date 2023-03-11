@@ -94,6 +94,10 @@ app.get("/api/", async (_, res) => {
 	res.send(version+" --- "+hello);
 });
 
+app.get("/", (req, res) => {
+	res.send("Hello World! - Only node");
+});
+
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
